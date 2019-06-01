@@ -11,8 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game implements KeyListener, ActionListener {
+    static final int RECT_SCALE = 10;
     private static Game instance;
-    private Canvas canvas;
     @Getter
     private Snake snake;
     @Getter
@@ -21,11 +21,11 @@ public class Game implements KeyListener, ActionListener {
     private Food food;
     @Getter
     private Timer timer;
-    static final int RECT_SCALE = 10;
     @Getter
     private Direction direction = Direction.DOWN;
+    private Canvas canvas;
     private int ticks;
-    private boolean keyPressed = false;
+    private boolean keyPressed;
 
     private Game() {
         initializeWindow();
@@ -41,9 +41,13 @@ public class Game implements KeyListener, ActionListener {
     public void start() {
         food = new Food();
         snake = new Snake();
-        timer = new Timer(1, this);
+        timer = new Timer(10, this);
         ticks = 0;
         timer.start();
+    }
+
+    void stop() {
+        timer.stop();
     }
 
     private void initializeWindow() {
@@ -51,18 +55,15 @@ public class Game implements KeyListener, ActionListener {
         jFrame.setVisible(true);
         jFrame.setSize(800, 600);
         jFrame.setResizable(false);
-        val dim = Toolkit.getDefaultToolkit().getScreenSize();
-        jFrame.setLocation(dim.width / 2 - jFrame.getWidth() / 2, dim.height / 2 - jFrame.getHeight() / 2);
+        val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        jFrame.setLocation(screenSize.width / 2 - jFrame.getWidth() / 2, screenSize.height / 2 - jFrame.getHeight() / 2);
         jFrame.add(canvas = new Canvas());
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.addKeyListener(this);
     }
 
-    public void keyTyped(KeyEvent e) {
-    }
-
     public void keyPressed(KeyEvent e) {
-        int i = e.getKeyCode();
+        val i = e.getKeyCode();
         if (!keyPressed) {
             keyPressed = true;
             if (i == KeyEvent.VK_LEFT && direction != Direction.RIGHT) {
@@ -77,16 +78,18 @@ public class Game implements KeyListener, ActionListener {
         }
     }
 
-    public void keyReleased(KeyEvent e) {
-    }
-
     public void actionPerformed(ActionEvent e) {
         canvas.repaint();
         ticks++;
-        if (ticks % 20 == 0) {
+        if (ticks % 5 == 0) {
             snake.update();
-            snake.move();
             keyPressed = false;
         }
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyReleased(KeyEvent e) {
     }
 }
