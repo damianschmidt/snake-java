@@ -4,6 +4,7 @@ import snake.game.Game;
 
 public class Application {
     public static void main(String[] args) {
-        Game.initialize();
+        // za latwo mordo
+        Game.getInstance().start();
     }
 }
