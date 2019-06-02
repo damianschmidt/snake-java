@@ -39,7 +39,7 @@ public class Game implements KeyListener, ActionListener {
     }
 
     public void start() {
-        objects = new ArrayList<UpdatePossible>();
+        objects = new ArrayList<>();
         objects.add(new Food());
         objects.add(new Snake());
         objects.add(new Wall(0, 0, jFrame.getWidth(), RECT_SCALE));
@@ -86,9 +86,19 @@ public class Game implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         ticks++;
         if (ticks % 5 == 0) {
+            if (ticks % 1000 == 0) {
+                objects.add(new Food());
+            }
+
+            if (objects.stream().noneMatch(object -> object instanceof Food)) {
+                objects.add(new Food());
+            }
+
             canvas.repaint();
             keyPressed = false;
         }
+
+
     }
 
     public void keyTyped(KeyEvent e) {
