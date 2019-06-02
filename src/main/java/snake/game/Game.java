@@ -22,10 +22,11 @@ public class Game implements KeyListener, ActionListener {
     @Getter
     private Timer timer;
     @Getter
-    private Direction direction = Direction.DOWN;
+    private Direction[] playerOneDirection = {Direction.UP};
+    @Getter
+    private Direction[] playerTwoDirection = {Direction.DOWN};
     private Canvas canvas;
     private int ticks;
-    private boolean keyPressed;
 
     private Game() {
         initializeWindow();
@@ -41,11 +42,12 @@ public class Game implements KeyListener, ActionListener {
     public void start() {
         objects = new ArrayList<>();
         objects.add(new Food());
-        objects.add(new Snake());
+        objects.add(new Snake(30, 30, playerOneDirection, new Color(122, 155, 239)));
+        objects.add(new Snake(1, 1, playerTwoDirection, new Color(255, 246, 143)));
         objects.add(new Wall(0, 0, jFrame.getWidth(), RECT_SCALE));
-        objects.add(new Wall(0, jFrame.getHeight() - 45, jFrame.getWidth(), RECT_SCALE));
+        objects.add(new Wall(0, jFrame.getHeight() - 40, jFrame.getWidth(), RECT_SCALE));
         objects.add(new Wall(0, 0, RECT_SCALE, jFrame.getHeight()));
-        objects.add(new Wall(jFrame.getWidth() - 24, 0, RECT_SCALE, jFrame.getHeight()));
+        objects.add(new Wall(jFrame.getWidth() - 20, 0, RECT_SCALE, jFrame.getHeight()));
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
@@ -69,25 +71,45 @@ public class Game implements KeyListener, ActionListener {
 
     public void keyPressed(KeyEvent e) {
         val i = e.getKeyCode();
-        if (!keyPressed) {
-            keyPressed = true;
-            if (i == KeyEvent.VK_LEFT && direction != Direction.RIGHT) {
-                direction = Direction.LEFT;
-            } else if (i == KeyEvent.VK_RIGHT && direction != Direction.LEFT) {
-                direction = Direction.RIGHT;
-            } else if (i == KeyEvent.VK_UP && direction != Direction.DOWN) {
-                direction = Direction.UP;
-            } else if (i == KeyEvent.VK_DOWN && direction != Direction.UP) {
-                direction = Direction.DOWN;
-            }
+        if (i == KeyEvent.VK_LEFT && playerOneDirection[0] != Direction.RIGHT) {
+            playerOneDirection[0] = Direction.LEFT;
+        } else if (i == KeyEvent.VK_RIGHT && playerOneDirection[0] != Direction.LEFT) {
+            playerOneDirection[0] = Direction.RIGHT;
+        } else if (i == KeyEvent.VK_UP && playerOneDirection[0] != Direction.DOWN) {
+            playerOneDirection[0] = Direction.UP;
+        } else if (i == KeyEvent.VK_DOWN && playerOneDirection[0] != Direction.UP) {
+            playerOneDirection[0] = Direction.DOWN;
         }
+
+        if (i == KeyEvent.VK_A && playerTwoDirection[0] != Direction.RIGHT) {
+            playerTwoDirection[0] = Direction.LEFT;
+        } else if (i == KeyEvent.VK_D && playerTwoDirection[0] != Direction.LEFT) {
+            playerTwoDirection[0] = Direction.RIGHT;
+        } else if (i == KeyEvent.VK_W && playerTwoDirection[0] != Direction.DOWN) {
+            playerTwoDirection[0] = Direction.UP;
+        } else if (i == KeyEvent.VK_S && playerTwoDirection[0] != Direction.UP) {
+            playerTwoDirection[0] = Direction.DOWN;
+        }
+
+        if (i == KeyEvent.VK_SPACE ) {
+            stop();
+            start();
+        }
+    }
+
+    private void isOver() {
+        objects.stream()
+                .filter(object -> object instanceof Snake)
+                .filter(object -> ((Snake) object).isDead())
+                .forEach(object -> stop());
     }
 
     public void actionPerformed(ActionEvent e) {
         ticks++;
+        isOver();
         if (ticks % 5 == 0) {
             if (ticks % 1000 == 0) {
-                objects.add(new Food());
+                objects.add(new Food(Color.CYAN, 2));
             }
 
             if (objects.stream().noneMatch(object -> object instanceof Food)) {
@@ -95,10 +117,7 @@ public class Game implements KeyListener, ActionListener {
             }
 
             canvas.repaint();
-            keyPressed = false;
         }
-
-
     }
 
     public void keyTyped(KeyEvent e) {

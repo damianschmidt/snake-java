@@ -15,13 +15,25 @@ class Snake implements UpdatePossible {
     private Point head;
     @Getter
     private List<Point> snakeParts;
+    private Color color;
     private int tailLength;
+    private Direction[] direction;
+    @Getter
+    private boolean Dead;
 
-    Snake() {
-        head = new Point(1, 1);
+    Snake(int x, int y, Direction[] direction, Color color) {
+        head = new Point(x, y);
         tailLength = STARTING_TAIL_LENGTH;
         snakeParts = new ArrayList<>();
+        this.direction = direction;
+        this.color = color;
     }
+
+    Snake(Direction[] direction) {
+        this(1, 1, direction, Color.BLUE);
+    }
+
+
 
     public void update(Graphics g) {
         move();
@@ -30,16 +42,16 @@ class Snake implements UpdatePossible {
     }
 
     private void move() {
-        if (Game.getInstance().getDirection() == Direction.UP && noTailAt(head.x, head.y - 1)) {
+        if (direction[0] == Direction.UP && noTailAt(head.x, head.y - 1)) {
             head = new Point(head.x, head.y - 1);
-        } else if (Game.getInstance().getDirection() == Direction.DOWN && noTailAt(head.x, head.y + 1)) {
+        } else if (direction[0] == Direction.DOWN && noTailAt(head.x, head.y + 1)) {
             head = new Point(head.x, head.y + 1);
-        } else if (Game.getInstance().getDirection() == Direction.LEFT && noTailAt(head.x - 1, head.y)) {
+        } else if (direction[0] == Direction.LEFT && noTailAt(head.x - 1, head.y)) {
             head = new Point(head.x - 1, head.y);
-        } else if (Game.getInstance().getDirection() == Direction.RIGHT && noTailAt(head.x + 1, head.y)) {
+        } else if (direction[0] == Direction.RIGHT && noTailAt(head.x + 1, head.y)) {
             head = new Point(head.x + 1, head.y);
         } else {
-            Game.getInstance().stop();
+            Dead = true;
         }
 
         removeLastPart();
@@ -53,15 +65,21 @@ class Snake implements UpdatePossible {
                     if(object instanceof Food) {
                         val food = ((Food) object);
                         if (head.equals(food.getPoint())){
-                            eat();
+                            eat(food.getPower());
                             food.setRemoved(true);
+                        }
+                    }
+                    if(object instanceof Wall) {
+                        val wall = ((Wall) object);
+                        if (isColliding(wall)){
+                            Dead = true;
                         }
                     }
                 });
     }
 
     private void draw(Graphics g) {
-        g.setColor(Color.BLUE);
+        g.setColor(color);
         for (val point : snakeParts) {
             g.fillRect(point.x * Game.RECT_SCALE, point.y * Game.RECT_SCALE, Game.RECT_SCALE, Game.RECT_SCALE);
         }
@@ -85,7 +103,14 @@ class Snake implements UpdatePossible {
         return true;
     }
 
-    private void eat() {
-        tailLength++;
+    private void eat(int power) {
+        tailLength += power;
+    }
+
+    private boolean isColliding(BaseObject object) {
+        return head.x < object.getPoint().x + object.getWidth() &&
+                head.x + 1 > object.getPoint().x &&
+                head.y < object.getPoint().y + object.getHeight() &&
+                1 + head.y > object.getPoint().y;
     }
 }
