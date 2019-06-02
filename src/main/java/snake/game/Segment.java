@@ -2,9 +2,9 @@ package snake.game;
 
 import java.awt.*;
 
-public class Wall extends BaseObject {
-    Wall(int x, int y, int width, int height) {
-        super(x, y, width, height);
+public class Segment extends BaseObject {
+    Segment(int x, int y, Color color) {
+        super(x, y, color);
     }
 
     public void update(Graphics g) {

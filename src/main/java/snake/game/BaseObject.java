@@ -8,6 +8,7 @@ import java.awt.*;
 
 @EqualsAndHashCode
 abstract class BaseObject implements UpdatePossible {
+    @Setter
     @Getter
     protected Point point;
     @Setter
@@ -34,15 +35,15 @@ abstract class BaseObject implements UpdatePossible {
         this(x, y, width, height, Color.MAGENTA);
     }
 
+    BaseObject(int x, int y, Color color) {
+        this(x, y, Game.RECT_SCALE, Game.RECT_SCALE, color);
+    }
+
     BaseObject(int x, int y) {
-        this(x, y, 1, 1, Color.MAGENTA);
+        this(x, y, Color.MAGENTA);
     }
 
     BaseObject(Color color) {
-        this(0, 0, 1, 1, color);
-    }
-
-    BaseObject() {
-        this(0, 0);
+        this(0, 0, color);
     }
 }

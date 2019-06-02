@@ -14,6 +14,10 @@ import java.awt.event.KeyListener;
 
 public class Game implements KeyListener, ActionListener {
     static final int RECT_SCALE = 10;
+    @Getter
+    private static final int WIDTH = 800;
+    @Getter
+    private static final int HEIGHT = 600;
     private static Game instance;
     @Getter
     private List<UpdatePossible> objects;
@@ -22,9 +26,9 @@ public class Game implements KeyListener, ActionListener {
     @Getter
     private Timer timer;
     @Getter
-    private Direction[] playerOneDirection = {Direction.UP};
+    private Direction[] playerOneDirection;
     @Getter
-    private Direction[] playerTwoDirection = {Direction.DOWN};
+    private Direction[] playerTwoDirection;
     private Canvas canvas;
     private int ticks;
 
@@ -40,27 +44,29 @@ public class Game implements KeyListener, ActionListener {
     }
 
     public void start() {
+        playerOneDirection = new Direction[]{Direction.DOWN};
+        playerTwoDirection = new Direction[]{Direction.UP};
         objects = new ArrayList<>();
         objects.add(new Food());
-        objects.add(new Snake(30, 30, playerOneDirection, new Color(122, 155, 239)));
-        objects.add(new Snake(1, 1, playerTwoDirection, new Color(255, 246, 143)));
-        objects.add(new Wall(0, 0, jFrame.getWidth(), RECT_SCALE));
-        objects.add(new Wall(0, jFrame.getHeight() - 40, jFrame.getWidth(), RECT_SCALE));
-        objects.add(new Wall(0, 0, RECT_SCALE, jFrame.getHeight()));
-        objects.add(new Wall(jFrame.getWidth() - 20, 0, RECT_SCALE, jFrame.getHeight()));
+        objects.add(new Snake(RECT_SCALE, RECT_SCALE, playerOneDirection, new Color(122, 155, 239)));
+        objects.add(new Snake(WIDTH - 2 *RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerTwoDirection, new Color(255, 246, 143)));
+        objects.add(new Wall(0, 0, WIDTH, RECT_SCALE)); //TOP
+        objects.add(new Wall(0, HEIGHT - RECT_SCALE, WIDTH, RECT_SCALE)); //BOTTOM
+        objects.add(new Wall(0, 0, RECT_SCALE, HEIGHT)); //LEFT
+        objects.add(new Wall(WIDTH - RECT_SCALE, 0, RECT_SCALE, HEIGHT)); //RIGHT
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
     }
 
-    void stop() {
+    private void stop() {
         timer.stop();
     }
 
     private void initializeWindow() {
         jFrame = new JFrame("Snake");
         jFrame.setVisible(true);
-        jFrame.setSize(800, 600);
+        jFrame.setSize(814, 635);
         jFrame.setResizable(false);
         val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         jFrame.setLocation(screenSize.width / 2 - jFrame.getWidth() / 2, screenSize.height / 2 - jFrame.getHeight() / 2);
