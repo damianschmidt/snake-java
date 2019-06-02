@@ -1,5 +1,6 @@
 package snake.game;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
 
@@ -7,7 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-class Snake {
+@EqualsAndHashCode
+class Snake implements UpdatePossible {
     private static final int STARTING_TAIL_LENGTH = 10;
     @Getter
     private Point head;
@@ -16,24 +18,15 @@ class Snake {
     private int tailLength;
 
     Snake() {
-        head = new Point(0, 0);
+        head = new Point(1, 1);
         tailLength = STARTING_TAIL_LENGTH;
-        snakeParts = new ArrayList<Point>();
+        snakeParts = new ArrayList<>();
     }
 
-    void update() {
+    public void update(Graphics g) {
         move();
-        removeLastPart();
-        eat();
-    }
-
-    void draw(Graphics g) {
-        g.setColor(Color.BLUE);
-        for (val point : snakeParts) {
-            g.fillRect(point.x * Game.RECT_SCALE, point.y * Game.RECT_SCALE, Game.RECT_SCALE, Game.RECT_SCALE);
-        }
-        g.fillRect(head.x * Game.RECT_SCALE, head.y * Game.RECT_SCALE,
-                Game.RECT_SCALE, Game.RECT_SCALE);
+        checkCollision();
+        draw(g);
     }
 
     private void move() {
@@ -48,19 +41,38 @@ class Snake {
         } else {
             Game.getInstance().stop();
         }
+
+        removeLastPart();
+    }
+
+    private void checkCollision() {
+        Game.getInstance().getObjects()
+                .stream()
+                .filter(object -> this.hashCode() != object.hashCode())
+                .forEach((object) -> {
+                    if(object instanceof Food) {
+                        val food = ((Food) object);
+                        if (head.equals(food.getPoint())){
+                            eat();
+                            food.setRemoved(true);
+                        }
+                    }
+                });
+    }
+
+    private void draw(Graphics g) {
+        g.setColor(Color.BLUE);
+        for (val point : snakeParts) {
+            g.fillRect(point.x * Game.RECT_SCALE, point.y * Game.RECT_SCALE, Game.RECT_SCALE, Game.RECT_SCALE);
+        }
+        g.fillRect(head.x * Game.RECT_SCALE, head.y * Game.RECT_SCALE,
+                Game.RECT_SCALE, Game.RECT_SCALE);
     }
 
     private void removeLastPart() {
         snakeParts.add(new Point(head.x, head.y));
         if (snakeParts.size() > tailLength) {
             snakeParts.remove(0);
-        }
-    }
-
-    private void eat() {
-        if (head.equals(Game.getInstance().getFood().getObject())) {
-            Game.getInstance().getFood().generateNewPosition();
-            tailLength++;
         }
     }
 
@@ -71,5 +83,9 @@ class Snake {
             }
         }
         return true;
+    }
+
+    private void eat() {
+        tailLength++;
     }
 }

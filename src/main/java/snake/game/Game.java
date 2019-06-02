@@ -5,6 +5,8 @@ import lombok.val;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,11 +16,9 @@ public class Game implements KeyListener, ActionListener {
     static final int RECT_SCALE = 10;
     private static Game instance;
     @Getter
-    private Snake snake;
+    private List<UpdatePossible> objects;
     @Getter
     private JFrame jFrame;
-    @Getter
-    private Food food;
     @Getter
     private Timer timer;
     @Getter
@@ -39,8 +39,13 @@ public class Game implements KeyListener, ActionListener {
     }
 
     public void start() {
-        food = new Food();
-        snake = new Snake();
+        objects = new ArrayList<UpdatePossible>();
+        objects.add(new Food());
+        objects.add(new Snake());
+        objects.add(new Wall(0, 0, jFrame.getWidth(), RECT_SCALE));
+        objects.add(new Wall(0, jFrame.getHeight() - 45, jFrame.getWidth(), RECT_SCALE));
+        objects.add(new Wall(0, 0, RECT_SCALE, jFrame.getHeight()));
+        objects.add(new Wall(jFrame.getWidth() - 24, 0, RECT_SCALE, jFrame.getHeight()));
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
@@ -79,10 +84,9 @@ public class Game implements KeyListener, ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        canvas.repaint();
         ticks++;
         if (ticks % 5 == 0) {
-            snake.update();
+            canvas.repaint();
             keyPressed = false;
         }
     }

@@ -9,8 +9,10 @@ class Canvas extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBackground(g);
-        Game.getInstance().getSnake().draw(g);
-        Game.getInstance().getFood().draw(g);
+        Game.getInstance().getObjects()
+                .forEach((object) -> object.update(g));
+        Game.getInstance().getObjects()
+                .removeIf(object -> object instanceof BaseObject && ((BaseObject)object).isRemoved());
     }
 
     private void drawBackground(Graphics g) {
