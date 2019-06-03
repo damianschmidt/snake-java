@@ -55,6 +55,7 @@ public class Game implements KeyListener, ActionListener {
         objects.add(new Wall(0, HEIGHT - RECT_SCALE, WIDTH, RECT_SCALE)); //BOTTOM
         objects.add(new Wall(0, 0, RECT_SCALE, HEIGHT)); //LEFT
         objects.add(new Wall(WIDTH - RECT_SCALE, 0, RECT_SCALE, HEIGHT)); //RIGHT
+        objects.add(new Hud());
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
@@ -108,7 +109,9 @@ public class Game implements KeyListener, ActionListener {
         objects.stream()
                 .filter(object -> object instanceof Snake)
                 .filter(object -> ((Snake) object).isDead())
-                .forEach(object -> stop());
+                .forEach(object -> {
+                    stop();
+                });
     }
 
     public void actionPerformed(ActionEvent e) {

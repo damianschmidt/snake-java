@@ -20,6 +20,7 @@ class Snake implements UpdatePossible {
     private Direction[] direction;
     @Getter
     private boolean Dead;
+    @Getter
     private int score;
 
     Snake(int x, int y, Direction[] direction, Color color) {
@@ -28,6 +29,7 @@ class Snake implements UpdatePossible {
         snakeParts = new ArrayList<>();
         this.direction = direction;
         this.color = color;
+        score = 0;
     }
 
     Snake(Direction[] direction) {
@@ -53,7 +55,6 @@ class Snake implements UpdatePossible {
         } else {
             Dead = true;
         }
-
         removeLastPart();
     }
 
@@ -112,6 +113,7 @@ class Snake implements UpdatePossible {
 
     private void eat(int power) {
         tailLength += power;
+        score++;
     }
 
     private boolean isColliding(BaseObject object) {
