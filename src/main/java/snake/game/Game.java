@@ -47,6 +47,7 @@ public class Game implements KeyListener, ActionListener {
         playerOneDirection = new Direction[]{Direction.DOWN};
         playerTwoDirection = new Direction[]{Direction.UP};
         objects = new ArrayList<>();
+        objects.add(new Food(20, 20, Color.BLUE, 5));
         objects.add(new Food());
         objects.add(new Snake(RECT_SCALE, RECT_SCALE, playerOneDirection, new Color(122, 155, 239)));
         objects.add(new Snake(WIDTH - 2 *RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerTwoDirection, new Color(255, 246, 143)));

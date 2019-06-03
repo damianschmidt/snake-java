@@ -20,6 +20,7 @@ class Snake implements UpdatePossible {
     private Direction[] direction;
     @Getter
     private boolean Dead;
+    private int score;
 
     Snake(int x, int y, Direction[] direction, Color color) {
         head = new Segment(x, y, color);
