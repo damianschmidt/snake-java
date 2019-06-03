@@ -15,6 +15,7 @@ class Snake implements UpdatePossible {
     private Segment head;
     @Getter
     private List<Segment> snakeParts;
+    @Getter
     private Color color;
     private int tailLength;
     private Direction[] direction;
@@ -22,18 +23,17 @@ class Snake implements UpdatePossible {
     private boolean Dead;
     @Getter
     private int score;
+    @Getter
+    private String name;
 
-    Snake(int x, int y, Direction[] direction, Color color) {
+    Snake(int x, int y, Direction[] direction, Color color, String name) {
         head = new Segment(x, y, color);
         tailLength = STARTING_TAIL_LENGTH;
         snakeParts = new ArrayList<>();
         this.direction = direction;
         this.color = color;
+        this.name = name;
         score = 0;
-    }
-
-    Snake(Direction[] direction) {
-        this(Game.RECT_SCALE, Game.RECT_SCALE, direction, Color.BLUE);
     }
 
 
