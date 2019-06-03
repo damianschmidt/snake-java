@@ -5,12 +5,12 @@ import lombok.val;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game implements KeyListener, ActionListener {
     static final int RECT_SCALE = 10;
@@ -30,7 +30,11 @@ public class Game implements KeyListener, ActionListener {
     @Getter
     private Direction[] playerTwoDirection;
     private Canvas canvas;
+    @Getter
+    private Ranking ranking;
     private int ticks;
+    @Getter
+    private boolean paused;
 
     private Game() {
         initializeWindow();
@@ -46,6 +50,7 @@ public class Game implements KeyListener, ActionListener {
     public void start() {
         playerOneDirection = new Direction[]{Direction.DOWN};
         playerTwoDirection = new Direction[]{Direction.UP};
+        ranking = new Ranking();
         objects = new ArrayList<>();
         objects.add(new Snake(RECT_SCALE, RECT_SCALE, playerOneDirection, new Color(122, 155, 239), "PlayerOne"));
         objects.add(new Snake(WIDTH - 2 *RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerTwoDirection, new Color(255, 246, 143), "PlayerTwo"));
@@ -56,6 +61,7 @@ public class Game implements KeyListener, ActionListener {
         objects.add(new Food(20, 20, Color.BLUE, 5));
         objects.add(new Food());
         objects.add(new Hud());
+        objects.add(ranking);
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
@@ -63,6 +69,10 @@ public class Game implements KeyListener, ActionListener {
 
     private void stop() {
         timer.stop();
+    }
+
+    private void restart() {
+        timer.restart();
     }
 
     private void initializeWindow() {
@@ -103,6 +113,15 @@ public class Game implements KeyListener, ActionListener {
             stop();
             start();
         }
+
+        if (i == KeyEvent.VK_R && !paused) {
+            paused = true;
+            canvas.repaint();
+            stop();
+        } else if (i == KeyEvent.VK_R && paused) {
+            paused = false;
+            restart();
+        }
     }
 
     private void gameOver() {
@@ -111,6 +130,19 @@ public class Game implements KeyListener, ActionListener {
                 .filter(object -> ((Snake) object).isDead())
                 .forEach(object -> {
                     stop();
+                    ranking.saveRankingToFile();
+                    addAliveToRanking();
+                });
+    }
+
+    private void addAliveToRanking() {
+        objects.stream()
+                .filter(object -> object instanceof Snake)
+                .filter(object -> !((Snake) object).isDead())
+                .forEach(object -> {
+                    val snake = ((Snake) object);
+                    Record record = new Record(snake.getName(), snake.getScore());
+                    ranking.addToRanking(record);
                 });
     }
 

@@ -38,12 +38,4 @@ abstract class BaseObject implements UpdatePossible {
     BaseObject(int x, int y, Color color) {
         this(x, y, Game.RECT_SCALE, Game.RECT_SCALE, color);
     }
-
-    BaseObject(int x, int y) {
-        this(x, y, Color.MAGENTA);
-    }
-
-    BaseObject(Color color) {
-        this(0, 0, color);
-    }
 }

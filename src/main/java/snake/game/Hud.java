@@ -11,8 +11,8 @@ public class Hud implements UpdatePossible {
     private List<String> names;
 
     Hud() {
-        scores = new ArrayList<Integer>();
-        names = new ArrayList<String>();
+        scores = new ArrayList<>();
+        names = new ArrayList<>();
     }
 
 

@@ -19,5 +19,4 @@ class Canvas extends JPanel {
         g.setColor(new Color(4414545));
         g.fillRect(0, 0, Game.getWIDTH(), Game.getHEIGHT());
     }
-
 }
