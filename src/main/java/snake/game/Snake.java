@@ -48,18 +48,20 @@ class Snake implements UpdatePossible {
     }
 
     private void move() {
-        if (direction[0] == Direction.UP && noTailAt(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE)) {
-            head.setPoint(new Point(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE));
-        } else if (direction[0] == Direction.DOWN && noTailAt(head.getPoint().x, head.getPoint().y + Game.RECT_SCALE)) {
-            head.setPoint(new Point(head.getPoint().x, head.getPoint().y + Game.RECT_SCALE));
-        } else if (direction[0] == Direction.LEFT && noTailAt(head.getPoint().x - Game.RECT_SCALE, head.getPoint().y)) {
-            head.setPoint(new Point(head.getPoint().x - Game.RECT_SCALE, head.getPoint().y));
-        } else if (direction[0] == Direction.RIGHT && noTailAt(head.getPoint().x + Game.RECT_SCALE, head.getPoint().y)) {
-            head.setPoint(new Point(head.getPoint().x + Game.RECT_SCALE, head.getPoint().y));
-        } else {
-            Dead = true;
+        if (!Game.getInstance().isOver()) {
+            if (direction[0] == Direction.UP && noTailAt(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE)) {
+                head.setPoint(new Point(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE));
+            } else if (direction[0] == Direction.DOWN && noTailAt(head.getPoint().x, head.getPoint().y + Game.RECT_SCALE)) {
+                head.setPoint(new Point(head.getPoint().x, head.getPoint().y + Game.RECT_SCALE));
+            } else if (direction[0] == Direction.LEFT && noTailAt(head.getPoint().x - Game.RECT_SCALE, head.getPoint().y)) {
+                head.setPoint(new Point(head.getPoint().x - Game.RECT_SCALE, head.getPoint().y));
+            } else if (direction[0] == Direction.RIGHT && noTailAt(head.getPoint().x + Game.RECT_SCALE, head.getPoint().y)) {
+                head.setPoint(new Point(head.getPoint().x + Game.RECT_SCALE, head.getPoint().y));
+            } else {
+                Dead = true;
+            }
+            removeLastPart();
         }
-        removeLastPart();
     }
 
     private void checkCollision() {
@@ -67,13 +69,6 @@ class Snake implements UpdatePossible {
                 .stream()
                 .filter(object -> this.hashCode() != object.hashCode())
                 .forEach((object) -> {
-                    if (object instanceof Food) {
-                        val food = ((Food) object);
-                        if (isColliding(food)) {
-                            food.eat(this);
-                            food.setRemoved(true);
-                        }
-                    }
                     if (object instanceof Wall) {
                         val wall = ((Wall) object);
                         if (isColliding(wall)) {
@@ -86,6 +81,13 @@ class Snake implements UpdatePossible {
                             Dead = true;
                         } else if (isCollidingWithSnakeHead(snake)) {
                             Dead = true;
+                        }
+                    }
+                    if (object instanceof Food) {
+                        val food = ((Food) object);
+                        if (isColliding(food)) {
+                            food.eat(this);
+                            food.setRemoved(true);
                         }
                     }
                 });

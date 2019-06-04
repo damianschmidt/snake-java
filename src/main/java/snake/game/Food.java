@@ -43,7 +43,7 @@ class Food extends BaseObject {
         snake.setScore(snake.getScore() + 1);
     }
 
-    private void generateNewPosition() {
+    void generateNewPosition() {
         point = generateRandomPoint();
 
         do {
@@ -72,13 +72,13 @@ class Food extends BaseObject {
         while (collide);
     }
 
-    private Point generateRandomPoint() {
+    Point generateRandomPoint() {
         int newX = round(random.nextInt(Game.getWIDTH() - 3) + 1);
         int newY = round(random.nextInt(Game.getHEIGHT() - 3) + 1);
         return new Point(newX, newY);
     }
 
-    private static int round(int n) {
+    static int round(int n) {
         int a = (n / 10) * 10;
         int b = a + 10;
         return (n - a > b - n) ? b : a;

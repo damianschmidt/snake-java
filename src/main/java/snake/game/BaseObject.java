@@ -32,7 +32,7 @@ abstract class BaseObject implements UpdatePossible {
     }
 
     BaseObject(int x, int y, int width, int height) {
-        this(x, y, width, height, new Color(124, 253, 29, 125));
+        this(x, y, width, height, new Color(124, 253, 29));
     }
 
     BaseObject(int x, int y, Color color) {
