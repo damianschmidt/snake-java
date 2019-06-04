@@ -43,7 +43,7 @@ public class Game implements KeyListener, ActionListener {
     private Hud hud;
     private int ticks;
     @Getter
-    private boolean paused, over;
+    private boolean paused, over, keyPressedOne, keyPressedTwo;
 
     private Game() {
         initializeWindow();
@@ -70,10 +70,10 @@ public class Game implements KeyListener, ActionListener {
         objects.add(new Wall(0, 0, RECT_SCALE, HEIGHT)); //LEFT
         objects.add(new Wall(WIDTH - RECT_SCALE, 0, RECT_SCALE, HEIGHT)); //RIGHT
 //        objects.add(new Snake(RECT_SCALE, RECT_SCALE, playerTwoDirection, new Color(122, 155, 239), "Damian", headImageOne));
-        objects.add(new Snake(WIDTH - 2 * RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerOneDirection, new Color(255, 246, 143), "Wonsz", headImageTwo));
+        objects.add(new Snake(WIDTH - 2 * RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerOneDirection, new Color(255, 246, 143), "WegeWonsz", headImageTwo));
         ranking = new Ranking();
         hud = new Hud();
-        timer = new Timer(1000/60, this);
+        timer = new Timer(1000 / 60, this);
         ticks = 0;
         timer.start();
     }
@@ -96,7 +96,7 @@ public class Game implements KeyListener, ActionListener {
                     ex.printStackTrace();
                 }
             }
-            if (ticks % 2000 == 0) {
+            if (ticks % 1300 == 0) {
                 try {
                     objectsToAdd.add(new FoodCreatesObstacle());
                 } catch (IOException ex) {
@@ -104,7 +104,7 @@ public class Game implements KeyListener, ActionListener {
                 }
             }
 
-            if (ticks % 2500 == 0) {
+            if (ticks % 1800 == 0) {
                 try {
                     objectsToAdd.add(new FoodMakesOtherOpponentsShorten());
                 } catch (IOException ex) {
@@ -121,6 +121,8 @@ public class Game implements KeyListener, ActionListener {
             }
 
             canvas.repaint();
+            keyPressedOne = false;
+            keyPressedTwo = false;
         }
     }
 
@@ -154,24 +156,36 @@ public class Game implements KeyListener, ActionListener {
 
     public void keyPressed(KeyEvent e) {
         val i = e.getKeyCode();
-        if (i == KeyEvent.VK_LEFT && playerOneDirection[0] != Direction.RIGHT) {
-            playerOneDirection[0] = Direction.LEFT;
-        } else if (i == KeyEvent.VK_RIGHT && playerOneDirection[0] != Direction.LEFT) {
-            playerOneDirection[0] = Direction.RIGHT;
-        } else if (i == KeyEvent.VK_UP && playerOneDirection[0] != Direction.DOWN) {
-            playerOneDirection[0] = Direction.UP;
-        } else if (i == KeyEvent.VK_DOWN && playerOneDirection[0] != Direction.UP) {
-            playerOneDirection[0] = Direction.DOWN;
+        if (!keyPressedOne) {
+            if (i == KeyEvent.VK_LEFT && playerOneDirection[0] != Direction.RIGHT) {
+                playerOneDirection[0] = Direction.LEFT;
+                keyPressedOne = true;
+            } else if (i == KeyEvent.VK_RIGHT && playerOneDirection[0] != Direction.LEFT) {
+                playerOneDirection[0] = Direction.RIGHT;
+                keyPressedOne = true;
+            } else if (i == KeyEvent.VK_UP && playerOneDirection[0] != Direction.DOWN) {
+                playerOneDirection[0] = Direction.UP;
+                keyPressedOne = true;
+            } else if (i == KeyEvent.VK_DOWN && playerOneDirection[0] != Direction.UP) {
+                playerOneDirection[0] = Direction.DOWN;
+                keyPressedOne = true;
+            }
         }
 
-        if (i == KeyEvent.VK_A && playerTwoDirection[0] != Direction.RIGHT) {
-            playerTwoDirection[0] = Direction.LEFT;
-        } else if (i == KeyEvent.VK_D && playerTwoDirection[0] != Direction.LEFT) {
-            playerTwoDirection[0] = Direction.RIGHT;
-        } else if (i == KeyEvent.VK_W && playerTwoDirection[0] != Direction.DOWN) {
-            playerTwoDirection[0] = Direction.UP;
-        } else if (i == KeyEvent.VK_S && playerTwoDirection[0] != Direction.UP) {
-            playerTwoDirection[0] = Direction.DOWN;
+        if (!keyPressedTwo) {
+            if (i == KeyEvent.VK_A && playerTwoDirection[0] != Direction.RIGHT) {
+                playerTwoDirection[0] = Direction.LEFT;
+                keyPressedTwo = true;
+            } else if (i == KeyEvent.VK_D && playerTwoDirection[0] != Direction.LEFT) {
+                playerTwoDirection[0] = Direction.RIGHT;
+                keyPressedTwo = true;
+            } else if (i == KeyEvent.VK_W && playerTwoDirection[0] != Direction.DOWN) {
+                playerTwoDirection[0] = Direction.UP;
+                keyPressedTwo = true;
+            } else if (i == KeyEvent.VK_S && playerTwoDirection[0] != Direction.UP) {
+                playerTwoDirection[0] = Direction.DOWN;
+                keyPressedTwo = true;
+            }
         }
 
         if (i == KeyEvent.VK_SPACE) {

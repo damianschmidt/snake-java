@@ -77,14 +77,14 @@ public class Food extends BaseObject {
     }
 
     Point generateRandomPoint() {
-        int newX = round(random.nextInt(Game.getWIDTH() - 3) + 1);
-        int newY = round(random.nextInt(Game.getHEIGHT() - 3) + 1);
+        int newX = round(random.nextInt(Game.getWIDTH() - 2 * Game.RECT_SCALE) + Game.RECT_SCALE);
+        int newY = round(random.nextInt(Game.getHEIGHT() - 2 * Game.RECT_SCALE) + Game.RECT_SCALE);
         return new Point(newX, newY);
     }
 
     static int round(int n) {
-        int a = (n / 10) * 10;
-        int b = a + 10;
+        int a = (n / Game.RECT_SCALE) * Game.RECT_SCALE;
+        int b = a + Game.RECT_SCALE;
         return (n - a > b - n) ? b : a;
     }
 
@@ -96,9 +96,15 @@ public class Food extends BaseObject {
     }
 
     private boolean isCollidingWithSnake(Point point, Snake snake) {
+        boolean isCollide = false;
         for (Segment segment : snake.getSnakeParts()) {
-            return isCollidingWithObjects(point, segment);
+            if (isCollidingWithObjects(point, segment)) {
+                isCollide = true;
+            }
         }
-        return isCollidingWithObjects(point, snake.getHead());
+        if (isCollidingWithObjects(point, snake.getHead())) {
+            isCollide = true;
+        }
+        return isCollide;
     }
 }
