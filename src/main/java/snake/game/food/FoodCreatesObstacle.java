@@ -1,4 +1,8 @@
-package snake.game;
+package snake.game.food;
+
+import snake.game.Game;
+import snake.game.Snake;
+import snake.game.Wall;
 
 import java.awt.*;
 
@@ -8,7 +12,7 @@ class FoodCreatesObstacle extends Food {
     }
 
     @Override
-    void eat(Snake snake) {
+    public void eat(Snake snake) {
         super.eat(snake);
         width = round(getRandom().nextInt(Game.getWIDTH() / 4 + 5));
         height = round(getRandom().nextInt(Game.getHEIGHT() / 4 + 5));

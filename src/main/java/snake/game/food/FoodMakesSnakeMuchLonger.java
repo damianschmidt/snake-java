@@ -1,4 +1,6 @@
-package snake.game;
+package snake.game.food;
+
+import snake.game.Snake;
 
 import java.awt.*;
 
@@ -9,7 +11,7 @@ class FoodMakesSnakeMuchLonger extends Food {
     }
 
     @Override
-    void eat(Snake snake) {
+    public void eat(Snake snake) {
         super.eat(snake);
     }
 }

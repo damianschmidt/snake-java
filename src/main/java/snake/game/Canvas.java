@@ -13,9 +13,8 @@ class Canvas extends JPanel {
                 .forEach((object) -> object.update(g));
         Game.getInstance().getObjectsToAdd()
                 .forEach(objectToAdd -> Game.getInstance().getObjects().add(objectToAdd));
-        Game.getInstance().getObjects().stream()
-                .filter(object -> object instanceof Ranking).
-                forEach(object -> object.update(g));
+        Game.getInstance().getHud().update(g);
+        Game.getInstance().getRanking().update(g);
         Game.getInstance().getObjectsToAdd().clear();
         Game.getInstance().getObjects()
                 .removeIf(object -> object instanceof BaseObject && ((BaseObject)object).isRemoved());

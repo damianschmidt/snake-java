@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.awt.*;
 
 @EqualsAndHashCode
-abstract class BaseObject implements UpdatePossible {
+public abstract class BaseObject implements UpdatePossible {
     @Setter
     @Getter
     protected Point point;
@@ -22,7 +22,7 @@ abstract class BaseObject implements UpdatePossible {
     protected int height;
     protected Color color;
 
-    BaseObject(int x, int y, int width, int height, Color color) {
+    public BaseObject(int x, int y, int width, int height, Color color) {
         this.point = new Point();
         this.point.x = x;
         this.point.y = y;
@@ -31,11 +31,11 @@ abstract class BaseObject implements UpdatePossible {
         this.color = color;
     }
 
-    BaseObject(int x, int y, int width, int height) {
+    public BaseObject(int x, int y, int width, int height) {
         this(x, y, width, height, new Color(124, 253, 29));
     }
 
-    BaseObject(int x, int y, Color color) {
+    public BaseObject(int x, int y, Color color) {
         this(x, y, Game.RECT_SCALE, Game.RECT_SCALE, color);
     }
 }

@@ -3,7 +3,7 @@ package snake.game;
 import java.awt.*;
 
 public class Wall extends BaseObject {
-    Wall(int x, int y, int width, int height) {
+    public Wall(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 

@@ -4,13 +4,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+import snake.game.food.Food;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode
-class Snake implements UpdatePossible {
+public class Snake implements UpdatePossible {
     private static final int STARTING_TAIL_LENGTH = 10;
     @Getter
     private Segment head;

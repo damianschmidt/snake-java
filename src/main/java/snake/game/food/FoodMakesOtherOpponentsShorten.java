@@ -1,17 +1,19 @@
-package snake.game;
+package snake.game.food;
 
 import lombok.val;
+import snake.game.Game;
+import snake.game.Snake;
 
 import java.awt.*;
 
-class FoodMakesOtherOpponentsShorten extends Food {
-    FoodMakesOtherOpponentsShorten(){
+public class FoodMakesOtherOpponentsShorten extends Food {
+    public FoodMakesOtherOpponentsShorten(){
         super(Color.CYAN);
 
     }
 
     @Override
-    void eat(Snake snake) {
+    public void eat(Snake snake) {
         super.eat(snake);
         Game.getInstance().getObjects()
                 .stream()

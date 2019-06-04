@@ -1,13 +1,17 @@
-package snake.game;
+package snake.game.food;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+import snake.game.BaseObject;
+import snake.game.Game;
+import snake.game.Segment;
+import snake.game.Snake;
 
 import java.awt.*;
 import java.util.Random;
 
-class Food extends BaseObject {
+public class Food extends BaseObject {
     @Getter
     private Random random;
     @Setter
@@ -28,7 +32,7 @@ class Food extends BaseObject {
 
     }
 
-    Food() {
+    public Food() {
         this(Color.RED);
     }
 
@@ -38,7 +42,7 @@ class Food extends BaseObject {
         g.fillRect(point.x, point.y, width, height);
     }
 
-    void eat(Snake snake) {
+    public void eat(Snake snake) {
         snake.setTailLength(snake.getTailLength() + power);
         snake.setScore(snake.getScore() + 1);
     }

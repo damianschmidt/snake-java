@@ -2,6 +2,7 @@ package snake.game;
 
 import lombok.Getter;
 import lombok.val;
+import snake.game.food.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements KeyListener, ActionListener {
-    static final int RECT_SCALE = 10;
+    public static final int RECT_SCALE = 10;
     @Getter
     private static final int WIDTH = 800;
     @Getter
@@ -34,6 +35,8 @@ public class Game implements KeyListener, ActionListener {
     private Canvas canvas;
     @Getter
     private Ranking ranking;
+    @Getter
+    private Hud hud;
     private int ticks;
     @Getter
     private boolean paused, over;
@@ -55,19 +58,40 @@ public class Game implements KeyListener, ActionListener {
         playerOneDirection = new Direction[]{Direction.UP};
         playerTwoDirection = new Direction[]{Direction.DOWN};
         ranking = new Ranking();
+        hud = new Hud();
         objects = new ArrayList<>();
         objectsToAdd = new ArrayList<>();
-//        objectsToAdd.add(new Snake(RECT_SCALE, RECT_SCALE, playerTwoDirection, new Color(122, 155, 239), "Damian"));
+        objectsToAdd.add(new Snake(RECT_SCALE, RECT_SCALE, playerTwoDirection, new Color(122, 155, 239), "Damian"));
         objectsToAdd.add(new Snake(WIDTH - 2 * RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerOneDirection, new Color(255, 246, 143), "Wonsz"));
         objectsToAdd.add(new Wall(0, 0, WIDTH, RECT_SCALE)); //TOP
         objectsToAdd.add(new Wall(0, HEIGHT - RECT_SCALE, WIDTH, RECT_SCALE)); //BOTTOM
         objectsToAdd.add(new Wall(0, 0, RECT_SCALE, HEIGHT)); //LEFT
         objectsToAdd.add(new Wall(WIDTH - RECT_SCALE, 0, RECT_SCALE, HEIGHT)); //RIGHT
-        objectsToAdd.add(new Hud());
-        objectsToAdd.add(ranking);
         timer = new Timer(10, this);
         ticks = 0;
         timer.start();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        ticks++;
+        if (ticks % 5 == 0) {
+            gameOver();
+            if (ticks % 1000 == 0) {
+                objects.add(new FoodMakesOtherOpponentsShorten());
+            }
+
+            if (objects.stream().noneMatch(object -> object instanceof Food)) {
+                objects.add(new Food());
+            }
+
+            canvas.repaint();
+        }
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyReleased(KeyEvent e) {
     }
 
     private void stop() {
@@ -149,27 +173,5 @@ public class Game implements KeyListener, ActionListener {
                     Record record = new Record(snake.getName(), snake.getScore());
                     ranking.addToRanking(record);
                 });
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        ticks++;
-        if (ticks % 5 == 0) {
-            gameOver();
-            if (ticks % 1000 == 0) {
-                objects.add(new FoodMakesOtherOpponentsShorten());
-            }
-
-            if (objects.stream().noneMatch(object -> object instanceof Food)) {
-                objects.add(new Food());
-            }
-
-            canvas.repaint();
-        }
-    }
-
-    public void keyTyped(KeyEvent e) {
-    }
-
-    public void keyReleased(KeyEvent e) {
     }
 }
