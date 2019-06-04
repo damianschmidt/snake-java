@@ -25,7 +25,7 @@ class Ranking implements UpdatePossible{
     }
 
     private void drawBackground(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 127));
+        g.setColor(new Color(255, 255, 255, 127));
         g.fillRect(50, 50, Game.getWIDTH() - 100, Game.getHEIGHT() - 100);
     }
 

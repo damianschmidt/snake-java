@@ -4,12 +4,14 @@ import lombok.val;
 import snake.game.Game;
 import snake.game.Snake;
 
-import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 public class FoodMakesOtherOpponentsShorten extends Food {
-    public FoodMakesOtherOpponentsShorten(){
-        super(Color.CYAN);
-
+    public FoodMakesOtherOpponentsShorten() throws IOException {
+        super();
+        image = ImageIO.read(new File("C:\\Users\\Damian Schmidt\\IdeaProjects\\snake\\snake_pwr\\src\\main\\resources\\kiwi.png"));
     }
 
     @Override
@@ -22,7 +24,7 @@ public class FoodMakesOtherOpponentsShorten extends Food {
                     if (object instanceof Snake) {
                         val otherSnake = ((Snake) object);
                         if(!otherSnake.equals(snake)) {
-                            otherSnake.setTailLength(5);
+                            otherSnake.setTailLength(10);
                         }
                     }
                 });

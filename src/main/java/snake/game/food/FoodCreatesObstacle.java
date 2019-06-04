@@ -4,11 +4,14 @@ import snake.game.Game;
 import snake.game.Snake;
 import snake.game.Wall;
 
-import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
-class FoodCreatesObstacle extends Food {
-    FoodCreatesObstacle(){
-        super(Color.PINK);
+public class FoodCreatesObstacle extends Food {
+    public FoodCreatesObstacle() throws IOException {
+        super();
+        image = ImageIO.read(new File("C:\\Users\\Damian Schmidt\\IdeaProjects\\snake\\snake_pwr\\src\\main\\resources\\orange.png"));
     }
 
     @Override

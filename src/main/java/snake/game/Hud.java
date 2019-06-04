@@ -55,7 +55,7 @@ public class Hud implements UpdatePossible {
                         String lost = snake.getName() + " lost!";
                         g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
                         g.setColor(snake.getColor());
-                        g.drawString(lost, 20, Game.getHEIGHT() - 20);
+                        g.drawString(lost, 30, Game.getHEIGHT() - 30);
                         break;
                     }
                 }

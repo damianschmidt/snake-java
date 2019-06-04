@@ -8,7 +8,11 @@ import snake.game.Game;
 import snake.game.Segment;
 import snake.game.Snake;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Food extends BaseObject {
@@ -18,28 +22,24 @@ public class Food extends BaseObject {
     @Getter
     private int power;
     private boolean collide;
+    BufferedImage image;
 
-    Food(int width, int height, Color color) {
-        super(0, 0, width, height, color);
+
+    Food(int width, int height) throws IOException {
+        super(0, 0, width, height);
+        image = ImageIO.read(new File("C:\\Users\\Damian Schmidt\\IdeaProjects\\snake\\snake_pwr\\src\\main\\resources\\food.png"));
         random = new Random();
         generateNewPosition();
         power = 1;
-
     }
 
-    Food(Color color) {
-        this(Game.RECT_SCALE, Game.RECT_SCALE, color);
-
-    }
-
-    public Food() {
-        this(Color.RED);
+    public Food() throws IOException {
+        this(Game.RECT_SCALE, Game.RECT_SCALE);
     }
 
     @Override
     public void update(Graphics g) {
-        g.setColor(color);
-        g.fillRect(point.x, point.y, width, height);
+        g.drawImage(image, point.x, point.y, width, height, null);
     }
 
     public void eat(Snake snake) {

@@ -7,6 +7,7 @@ import lombok.val;
 import snake.game.food.Food;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +31,16 @@ public class Snake implements UpdatePossible {
     private int score;
     @Getter
     private String name;
+    BufferedImage headImage;
 
-    Snake(int x, int y, Direction[] direction, Color color, String name) {
+    Snake(int x, int y, Direction[] direction, Color color, String name, BufferedImage headImage) {
         head = new Segment(x, y, color);
         tailLength = STARTING_TAIL_LENGTH;
         snakeParts = new ArrayList<>();
         this.direction = direction;
         this.color = color;
         this.name = name;
+        this.headImage = headImage;
         score = 0;
     }
 
@@ -50,6 +53,7 @@ public class Snake implements UpdatePossible {
 
     private void move() {
         if (!Game.getInstance().isOver()) {
+            removeLastPart();
             if (direction[0] == Direction.UP && noTailAt(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE)) {
                 head.setPoint(new Point(head.getPoint().x, head.getPoint().y - Game.RECT_SCALE));
             } else if (direction[0] == Direction.DOWN && noTailAt(head.getPoint().x, head.getPoint().y + Game.RECT_SCALE)) {
@@ -61,7 +65,6 @@ public class Snake implements UpdatePossible {
             } else {
                 Dead = true;
             }
-            removeLastPart();
         }
     }
 
@@ -97,18 +100,18 @@ public class Snake implements UpdatePossible {
     private void draw(Graphics g) {
         g.setColor(color);
         for (val segment : snakeParts) {
-            g.fillRect(segment.getPoint().x, segment.getPoint().y, segment.getWidth(), segment.getHeight());
+            g.fillOval(segment.getPoint().x, segment.getPoint().y, segment.getWidth(), segment.getHeight());
         }
-        g.fillRect(head.getPoint().x, head.getPoint().y, head.getWidth(), head.getHeight());
+        g.drawImage(headImage, head.getPoint().x, head.getPoint().y, head.getWidth(), head.getHeight(), null);
     }
 
     private void removeLastPart() {
-        snakeParts.add(new Segment(head.getPoint().x, head.getPoint().y, color));
         if (snakeParts.size() > tailLength) {
             while (snakeParts.size() != tailLength) {
                 snakeParts.remove(0);
             }
         }
+        snakeParts.add(new Segment(head.getPoint().x, head.getPoint().y, color));
     }
 
     private boolean noTailAt(int x, int y) {
