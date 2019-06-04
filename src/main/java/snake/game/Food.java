@@ -1,6 +1,7 @@
 package snake.game;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.util.Random;
 class Food extends BaseObject {
     @Getter
     private Random random;
+    @Setter
     @Getter
     private int power;
     private boolean collide;
@@ -71,8 +73,8 @@ class Food extends BaseObject {
     }
 
     private Point generateRandomPoint() {
-        int newX = round(random.nextInt(Game.getWIDTH() - 2) + 1);
-        int newY = round(random.nextInt(Game.getHEIGHT() - 2) + 1);
+        int newX = round(random.nextInt(Game.getWIDTH() - 3) + 1);
+        int newY = round(random.nextInt(Game.getHEIGHT() - 3) + 1);
         return new Point(newX, newY);
     }
 

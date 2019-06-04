@@ -5,8 +5,9 @@ import lombok.val;
 import java.awt.*;
 
 class FoodMakesOtherOpponentsShorten extends Food {
-    FoodMakesOtherOpponentsShorten(Color color){
-        super(color);
+    FoodMakesOtherOpponentsShorten(){
+        super(Color.CYAN);
+
     }
 
     @Override
