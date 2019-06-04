@@ -15,21 +15,34 @@ class Ranking implements UpdatePossible{
         loadRankingFromFile();
     }
 
+    @Override
     public void update(Graphics g) {
         if (Game.getInstance().isPaused()){
-            g.setColor(new Color(0, 0, 0, 127));
-            g.fillRect(50, 50, Game.getWIDTH() - 100, Game.getHEIGHT() - 100);
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-            g.drawString("Ranking", 60, 100);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
-            for (int i = 0; i < 10; i++) {
-                Record record = records.get(i);
-                String recordName = i + 1 + ". " + record.getName();
-                int recordScore = record.getScore();
-                g.drawString(recordName, 100, 150 + i * 40);
-                g.drawString(String.valueOf(recordScore), 400, 150 + i * 40);
-            }
+            drawBackground(g);
+            drawTitle(g);
+            drawRecords(g);
+        }
+    }
+
+    private void drawBackground(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 127));
+        g.fillRect(50, 50, Game.getWIDTH() - 100, Game.getHEIGHT() - 100);
+    }
+
+    private void drawTitle(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+    }
+
+    private void drawRecords(Graphics g) {
+        g.drawString("Ranking", 60, 100);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+        for (int i = 0; i < 10; i++) {
+            Record record = records.get(i);
+            String recordName = i + 1 + ". " + record.getName();
+            int recordScore = record.getScore();
+            g.drawString(recordName, 100, 150 + i * 40);
+            g.drawString(String.valueOf(recordScore), 400, 150 + i * 40);
         }
     }
 
@@ -56,7 +69,7 @@ class Ranking implements UpdatePossible{
     }
 
     void saveRankingToFile() {
-        records.sort(new Sortbyscore());
+        records.sort(new SortByScore());
         try (PrintWriter pw = new PrintWriter(new FileOutputStream("src/main/data/ranking.txt"))) {
             for (Record record : records)
                 pw.println(record.getScore() + " " + record.getName());

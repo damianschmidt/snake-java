@@ -2,6 +2,7 @@ package snake.game;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import java.awt.*;
@@ -17,10 +18,13 @@ class Snake implements UpdatePossible {
     private List<Segment> snakeParts;
     @Getter
     private Color color;
+    @Getter
+    @Setter
     private int tailLength;
     private Direction[] direction;
     @Getter
     private boolean Dead;
+    @Setter
     @Getter
     private int score;
     @Getter
@@ -36,7 +40,7 @@ class Snake implements UpdatePossible {
         score = 0;
     }
 
-
+    @Override
     public void update(Graphics g) {
         move();
         checkCollision();
@@ -66,7 +70,7 @@ class Snake implements UpdatePossible {
                     if (object instanceof Food) {
                         val food = ((Food) object);
                         if (isColliding(food)) {
-                            eat(food.getPower());
+                            food.eat(this);
                             food.setRemoved(true);
                         }
                     }
@@ -98,7 +102,9 @@ class Snake implements UpdatePossible {
     private void removeLastPart() {
         snakeParts.add(new Segment(head.getPoint().x, head.getPoint().y, color));
         if (snakeParts.size() > tailLength) {
-            snakeParts.remove(0);
+            while (snakeParts.size() != tailLength) {
+                snakeParts.remove(0);
+            }
         }
     }
 
@@ -109,11 +115,6 @@ class Snake implements UpdatePossible {
             }
         }
         return true;
-    }
-
-    private void eat(int power) {
-        tailLength += power;
-        score++;
     }
 
     private boolean isColliding(BaseObject object) {

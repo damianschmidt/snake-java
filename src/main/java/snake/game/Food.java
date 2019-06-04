@@ -13,25 +13,32 @@ class Food extends BaseObject {
     private int power;
     private boolean collide;
 
-    Food(int width, int height, Color color, int power) {
+    Food(int width, int height, Color color) {
         super(0, 0, width, height, color);
         random = new Random();
         generateNewPosition();
-        this.power = power;
+        power = 1;
+
     }
 
-    Food(Color color, int power) {
-        this(Game.RECT_SCALE, Game.RECT_SCALE, color, power);
+    Food(Color color) {
+        this(Game.RECT_SCALE, Game.RECT_SCALE, color);
 
     }
 
     Food() {
-        this(Color.RED, 1);
+        this(Color.RED);
     }
 
+    @Override
     public void update(Graphics g) {
         g.setColor(color);
         g.fillRect(point.x, point.y, width, height);
+    }
+
+    void eat(Snake snake) {
+        snake.setTailLength(snake.getTailLength() + power);
+        snake.setScore(snake.getScore() + 1);
     }
 
     private void generateNewPosition() {

@@ -52,14 +52,14 @@ public class Game implements KeyListener, ActionListener {
         playerTwoDirection = new Direction[]{Direction.UP};
         ranking = new Ranking();
         objects = new ArrayList<>();
+        objects.add(new Food(20, 20, Color.BLUE));
+        objects.add(new FoodMakesOtherOpponentsShorten(Color.CYAN));
         objects.add(new Snake(RECT_SCALE, RECT_SCALE, playerOneDirection, new Color(122, 155, 239), "PlayerOne"));
         objects.add(new Snake(WIDTH - 2 *RECT_SCALE, HEIGHT - 2 * RECT_SCALE, playerTwoDirection, new Color(255, 246, 143), "PlayerTwo"));
         objects.add(new Wall(0, 0, WIDTH, RECT_SCALE)); //TOP
         objects.add(new Wall(0, HEIGHT - RECT_SCALE, WIDTH, RECT_SCALE)); //BOTTOM
         objects.add(new Wall(0, 0, RECT_SCALE, HEIGHT)); //LEFT
         objects.add(new Wall(WIDTH - RECT_SCALE, 0, RECT_SCALE, HEIGHT)); //RIGHT
-        objects.add(new Food(20, 20, Color.BLUE, 5));
-        objects.add(new Food());
         objects.add(new Hud());
         objects.add(ranking);
         timer = new Timer(10, this);
@@ -151,7 +151,7 @@ public class Game implements KeyListener, ActionListener {
         gameOver();
         if (ticks % 5 == 0) {
             if (ticks % 1000 == 0) {
-                objects.add(new Food(Color.CYAN, 2));
+                objects.add(new FoodMakesOtherOpponentsShorten(Color.CYAN));
             }
 
             if (objects.stream().noneMatch(object -> object instanceof Food)) {
